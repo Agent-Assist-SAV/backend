@@ -14,6 +14,7 @@ class ChatMessage(BaseModel):
 class Chat(BaseModel):
     id: str
     messages: list[ChatMessage]
+    context: str
 
 class CreateChatMessageDTO(BaseModel):
     message: str

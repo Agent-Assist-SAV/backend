@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 
 from src.chats.dtos import Chat, ChatMessage, CreateChatMessageDTO
 import src.chats.service as service
@@ -21,3 +21,7 @@ async def get_chat(chat_id: str) -> Optional[Chat]:
 @router.post("/chats/{chat_id}/messages")
 async def add_message_to_chat(chat_id: str, message: CreateChatMessageDTO) -> ChatMessage:
     return service.add_message_to_chat(chat_id, message)
+
+@router.put("/chats/{chat_id}/context")
+async def update_chat_context(chat_id: str, context: str = Body(...)) -> None:
+    service.update_chat_context(chat_id, context) 
