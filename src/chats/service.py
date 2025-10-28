@@ -9,7 +9,7 @@ from src.dependencies import get_ai_service
 chats: list[Chat] = [Chat(id="1", messages=[
         ChatMessage(id="msg1", message="Bonjour !", role=ChatMessageRoleEnum.user),
         ChatMessage(id="msg2", message="Comment puis-je vous aider aujourd'hui ?", role=ChatMessageRoleEnum.assistant)
-    ], context="General inquiry")]
+    ], context="Je suis un assitant de Carrefour et je m'appelle Robin.")]
 
 sse_queues_by_chat_id: dict[str, list[asyncio.Queue]] = {}
 
