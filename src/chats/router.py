@@ -25,7 +25,6 @@ async def add_message_to_chat(chat_id: str, message: CreateChatMessageDTO) -> Ch
 
 @router.get("/chats/{chat_id}/sse")
 async def chat_sse(chat_id: str):
-    """Server-Sent Events endpoint pour recevoir les messages en temps réel"""
     async def message_generator():
         queue = service.subscribe_to_chat_sse(chat_id)
         try:

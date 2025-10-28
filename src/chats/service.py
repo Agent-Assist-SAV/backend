@@ -9,29 +9,24 @@ chats: list[Chat] = [Chat(id="1", messages=[
         ChatMessage(id="msg2", message="How can I assist you today?", role=ChatMessageRoleEnum.assistant)
     ], context="General inquiry")]
 
-# Dictionnaire pour stocker les queues SSE par chat_id
-# Format: {chat_id: [queue1, queue2, ...]}
-sse_queues: dict[str, list] = {}
+sse_queues_by_chat_id: dict[str, list[asyncio.Queue]] = {}
 
 def subscribe_to_chat_sse(chat_id: str) -> asyncio.Queue:
-    """S'abonner aux messages SSE d'un chat"""
-    if chat_id not in sse_queues:
-        sse_queues[chat_id] = []
+    if chat_id not in sse_queues_by_chat_id:
+        sse_queues_by_chat_id[chat_id] = []
     queue: asyncio.Queue = asyncio.Queue()
-    sse_queues[chat_id].append(queue)
+    sse_queues_by_chat_id[chat_id].append(queue)
     return queue
 
 def unsubscribe_from_chat_sse(chat_id: str, queue: asyncio.Queue) -> None:
-    """Se désabonner des messages SSE d'un chat"""
-    if chat_id in sse_queues and queue in sse_queues[chat_id]:
-        sse_queues[chat_id].remove(queue)
-        if not sse_queues[chat_id]:
-            del sse_queues[chat_id]
+    if chat_id in sse_queues_by_chat_id and queue in sse_queues_by_chat_id[chat_id]:
+        sse_queues_by_chat_id[chat_id].remove(queue)
+        if not sse_queues_by_chat_id[chat_id]:
+            del sse_queues_by_chat_id[chat_id]
 
 async def notify_chat_subscribers(chat_id: str, message: ChatMessage) -> None:
-    """Notifier tous les subscribers d'un chat avec un nouveau message"""
-    if chat_id in sse_queues:
-        for queue in sse_queues[chat_id]:
+    if chat_id in sse_queues_by_chat_id:
+        for queue in sse_queues_by_chat_id[chat_id]:
             try:
                 await queue.put(message)
             except Exception as e:
