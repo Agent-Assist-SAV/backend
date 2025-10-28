@@ -2,11 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-# Charger les variables d'environnement
-load_dotenv()
-
 from src.chats.router import router
 
+
+load_dotenv()
 
 app = FastAPI()
 app.include_router(router, prefix="/api")

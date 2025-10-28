@@ -41,27 +41,20 @@ async def chat_sse(chat_id: str):
 
 @router.get("/chats/{chat_id}/suggest")
 async def chat_suggest_sse(chat_id: str):
-    """
-    Route SSE pour recevoir les suggestions de réponse en temps réel.
-    Les suggestions sont générées automatiquement quand un message user est ajouté au chat.
-    """
     async def suggestion_generator():
         queue = service.subscribe_to_suggestions_sse(chat_id)
         try:
             while True:
                 chunk = await queue.get()
                 
-                # Si c'est le signal de fin
                 if chunk == "[DONE]":
                     yield "data: [DONE]\n\n"
                     break
                 
-                # Si c'est une erreur
                 if chunk == "[ERROR]":
                     yield "event: error\ndata: Erreur lors de la génération\n\n"
                     break
                 
-                # Envoyer le chunk de suggestion
                 yield f"data: {chunk}\n\n"
         except Exception as e:
             print(f"Erreur SSE suggestion: {e}")

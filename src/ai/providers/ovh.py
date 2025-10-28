@@ -1,7 +1,7 @@
 import os
 import json
 import httpx
-from typing import AsyncGenerator, Any
+from typing import AsyncGenerator
 from src.ai.interfaces import IAIService
 from src.chats.dtos import Chat
 
@@ -13,17 +13,11 @@ class OVHAIService(IAIService):
         self.api_key = os.getenv("OVH_API_KEY")
         self.base_url = "https://mistral-7b-instruct-v0-3.endpoints.kepler.ai.cloud.ovh.net"
         if not self.api_key:
-            raise ValueError("OVH_API_KEY manquante dans les variables d'environnement")
+            raise ValueError("Missing OVH_API_KEY in environment variables")
     
     async def suggest_response(self, chat: Chat) -> AsyncGenerator[str, None]:
-        """
-        Génère une suggestion de réponse basée sur le contexte et l'historique du chat.
-        Retourne un générateur asynchrone pour le streaming SSE.
-        """
-        # Construire le prompt avec le contexte et l'historique
         messages = self._build_messages(chat)
         
-        # Appeler l'API OVH en streaming
         async with httpx.AsyncClient(timeout=60.0) as client:
             async with client.stream(
                 "POST",
@@ -43,7 +37,7 @@ class OVHAIService(IAIService):
                 
                 async for line in response.aiter_lines():
                     if line.startswith("data: "):
-                        data = line[6:]  # Enlever "data: "
+                        data = line[6:]
                         if data == "[DONE]":
                             break
                         
@@ -58,10 +52,8 @@ class OVHAIService(IAIService):
                             continue
     
     def _build_messages(self, chat: Chat) -> list[dict[str, str]]:
-        """Construit la liste des messages pour l'API"""
         messages: list[dict[str, str]] = []
         
-        # Ajouter le contexte comme message système
         if chat.context:
             messages.append({
                 "role": "system",
@@ -86,7 +78,6 @@ Les réponses doivent être courtes, claires et directement utilisables par l'ag
                 "content": msg.message
             })
         
-        # Ajouter une instruction finale pour générer la suggestion
         messages.append({
             "role": "system",
             "content": """Génère maintenant une suggestion de réponse que l'agent pourrait envoyer au client. 
