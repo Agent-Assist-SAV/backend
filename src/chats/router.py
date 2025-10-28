@@ -39,6 +39,45 @@ async def chat_sse(chat_id: str):
     
     return StreamingResponse(message_generator(), media_type="text/event-stream")
 
+@router.get("/chats/{chat_id}/suggest")
+async def chat_suggest_sse(chat_id: str):
+    """
+    Route SSE pour recevoir les suggestions de réponse en temps réel.
+    Les suggestions sont générées automatiquement quand un message user est ajouté au chat.
+    """
+    async def suggestion_generator():
+        queue = service.subscribe_to_suggestions_sse(chat_id)
+        try:
+            while True:
+                chunk = await queue.get()
+                
+                # Si c'est le signal de fin
+                if chunk == "[DONE]":
+                    yield "data: [DONE]\n\n"
+                    break
+                
+                # Si c'est une erreur
+                if chunk == "[ERROR]":
+                    yield "event: error\ndata: Erreur lors de la génération\n\n"
+                    break
+                
+                # Envoyer le chunk de suggestion
+                yield f"data: {chunk}\n\n"
+        except Exception as e:
+            print(f"Erreur SSE suggestion: {e}")
+            yield f"event: error\ndata: {str(e)}\n\n"
+        finally:
+            service.unsubscribe_from_suggestions_sse(chat_id, queue)
+    
+    return StreamingResponse(
+        suggestion_generator(), 
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
 @router.put("/chats/{chat_id}/context")
 async def update_chat_context(chat_id: str, context: str = Body(...)) -> None:
     service.update_chat_context(chat_id, context) 
