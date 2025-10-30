@@ -29,32 +29,13 @@ Cette application backend est une API REST/streaming écrite en Python pour pilo
 
 - Langage
 	- Python 3.11+ (compatible 3.10/3.11) — runtime principal
-
 - Framework web
 	- FastAPI — routes, validation, SSE/WS et documentation OpenAPI auto-générée
-	- Starlette (inclus via FastAPI)
-
-- Serveur ASGI
-	- Uvicorn (+ uvloop quand disponible) — exécution ASGI haute perf
-
-- Validation & modèles
-	- Pydantic v2 — schémas Dto/validation
-
-- Clients HTTP & streaming
-	- httpx (async) — appels API externes & streaming SSE
-	- websockets — si besoin pour connexions temps réel
-
+- Infrastructure & conteneurisation
+	- Docker — conteneurisation
+	- Helm — déploiement Kubernetes
 - IA & intégrations
 	- Provider OVH/Mistral (implementation dans `src/ai/providers/ovh.py`) — usage d'une API compatible OpenAI en streaming
-	- Variables d'environnement gérées via `python-dotenv` (.env)
-
-- Observabilité & utilitaires
-	- sentry-sdk — remontée d'erreurs optionnelle
-	- rich — logs & utilitaires de dev
-
-- Dev / qualité
-	- requirements.txt — dépendances listées
-	- uvicorn pour le rechargement en dev
 
 ## Scripts d'exécution et déploiement
 Le dossier `scripts` contient des scripts pour exécuter, build et déployer l'application.
