@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  labels:
+    app: backend
+data:
+  API_PORT: "{{ .Values.apiPort }}"
+  API_HOST: "{{ .Values.apiHost }}"
+  CORS_ORIGINS: "{{ .Values.corsOrigins }}"
+  OVH_BASE_URL: "{{ .Values.ovhBaseUrl }}"

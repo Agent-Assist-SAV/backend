@@ -1,0 +1,10 @@
+scripts/
+helm/
+.venv/
+
+.env.template
+.gitignore
+__pycache__
+docker-compose.yml
+Dockerfile
+README.md

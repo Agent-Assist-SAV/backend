@@ -1,0 +1,5 @@
+apiPort: $API_PORT
+apiHost: $API_HOST
+corsOrigins: $CORS_ORIGINS
+ovhBaseUrl: $OVH_BASE_URL
+ovhApiKey: $OVH_API_KEY
