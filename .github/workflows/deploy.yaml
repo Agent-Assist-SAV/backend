@@ -2,17 +2,8 @@ name: Deploy Application
 run-name: ${{ github.actor }} is deploying 🚀
 on: [push]
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    environment: prod
-    outputs:
-      kubeconfig: ${{ steps.get-secret.outputs.kubeconfig }}
-    steps:
-      - id: get-secret
-        run: echo "kubeconfig=${{ secrets.KUBECONFIG }}" >> $GITHUB_OUTPUT
   deploy:
-    needs: prepare
     uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
-    with:  
+    with:
       image: rbndjx/agent-assist-sav-backend:latest
-      kubeconfig: ${{ needs.prepare.outputs.kubeconfig }}
+    secrets: inherit
