@@ -5,13 +5,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: 'deliverybot/helm@v1'
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
         with:
-            chart: 'helm'
-            release: '${{ inputs.release_name }}'
-            namespace: 'default'
-            token: '${{ github.token }}'
-            value-files: helm/values.yaml
-            secrets: >-
-              |
-                OVH_API_KEY: ${{ secrets.OVH_API_KEY }}
+          version: 'latest'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy Helm Chart
+        uses: 'deliverybot/helm@master'
+        with:
+          chart: 'helm'
+          release: '${{ inputs.release_name }}'
+          namespace: 'default'
+          token: '${{ github.token }}'
+          value-files: helm/values.yaml
+          secrets: >-
+            |
+              OVH_API_KEY: ${{ secrets.OVH_API_KEY }}
