@@ -6,4 +6,5 @@ jobs:
     uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
     with:
       image: rbndjx/agent-assist-sav-backend:latest
-    secrets: inherit
+    secrets:
+      kubeconfig: ${{ secrets.kubeconfig }} 
