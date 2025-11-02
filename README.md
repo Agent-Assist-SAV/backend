@@ -63,7 +63,7 @@ Pour construire l'image Docker de l'application, utilisez le script `build.sh`:
 Où `[tag]` est optionnel (par défaut `latest`). Optionnellement, le script propose de pousser l'image vers Docker Hub après la construction.
 
 ### Déploiement avec Helm
-Un chart Helm est inclus dans `helm/backend-chart` pour déployer l'application sur un cluster Kubernetes. Pour déployer ou mettre à jour l'application, utilisez le script `deploy.sh`:
+Un chart Helm est inclus dans `helm/` pour déployer l'application sur un cluster Kubernetes. Pour déployer ou mettre à jour l'application, utilisez le script `deploy.sh`:
 
 ```bash
 ./scripts/deploy.sh

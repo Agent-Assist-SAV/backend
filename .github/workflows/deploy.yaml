@@ -3,8 +3,15 @@ run-name: ${{ github.actor }} is deploying 🚀
 on: [push]
 jobs:
   deploy:
-    uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
-    with:
-      image: rbndjx/agent-assist-sav-backend:latest
-    secrets:
-      kubeconfig: ${{ secrets.kubeconfig }} 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 'deliverybot/helm@v1.7.0'
+        with:
+            chart: 'helm'
+            release: '${{ inputs.release_name }}'
+            namespace: 'default'
+            token: '${{ github.token }}'
+            value-files: helm/values.yaml
+            secrets: >-
+              |
+                OVH_API_KEY: ${{ secrets.OVH_API_KEY }}
