@@ -3,7 +3,9 @@ run-name: ${{ github.actor }} is deploying 🚀
 on: [push]
 jobs:
   deploy:
-    secrets: inherit
-    uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
-    with:  
-      image: rbndjx/agent-assist-sav-backend:latest
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
+        with:  
+          image: rbndjx/agent-assist-sav-backend:latest
