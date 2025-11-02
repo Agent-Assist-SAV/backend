@@ -2,6 +2,16 @@ name: Deploy Application
 run-name: ${{ github.actor }} is deploying 🚀
 on: [push]
 jobs:
+  test-secret:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test secret
+        run: |
+          if [ -z "${{ secrets.KUBECONFIG }}" ]; then
+            echo "❌ KUBECONFIG secret not found"
+          else
+            echo "✅ KUBECONFIG secret found"
+          fi
   deploy:
     uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
     with:
