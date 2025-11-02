@@ -1,8 +1,8 @@
 name: Deploy Application
-run-name: ${{ github.actor }} is deploying out GitHub Actions 🚀
+run-name: ${{ github.actor }} is deploying 🚀
 on: [push]
 jobs:
-  call-workflow-passing-data:
+  deploy:
     uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
-    secrets:
-      kubeconfig: "foobar"
+    with:  
+      image: rbndjx/agent-assist-sav-backend:latest
