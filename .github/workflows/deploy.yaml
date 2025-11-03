@@ -9,6 +9,6 @@ jobs:
       github_environment: production
       helm_chart_dir: ./helm
       kubernetes_namespace: default
-      values_file: /tmp/values-resolved.yaml
+      values_file: ./helm/values.yaml
     secrets:
       kubeconfig: ${{ secrets.KUBECONFIG_FILE }}
