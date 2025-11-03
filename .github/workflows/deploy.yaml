@@ -3,23 +3,11 @@ run-name: ${{ github.actor }} is deploying 🚀
 on: [push]
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: 'latest'
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy Helm Chart
-        uses: 'deliverybot/helm@master'
-        with:
-          chart: 'helm'
-          release: '${{ inputs.release_name }}'
-          namespace: 'default'
-          token: '${{ github.token }}'
-          value-files: helm/values.yaml
-          secrets: >-
-            |
-              OVH_API_KEY: ${{ secrets.OVH_API_KEY }}
+    uses: robindijoux/github-action-templates/.github/workflows/kubernetes.yml@main
+    with:
+      application_name: agent-assist-sav-backend
+      github_environment: production
+      helm_chart_dir: ./helm
+      kubernetes_namespace: default
+      values_file: /tmp/values-resolved.yaml
+    secrets: inherit
