@@ -10,4 +10,5 @@ jobs:
       helm_chart_dir: ./helm
       kubernetes_namespace: default
       values_file: /tmp/values-resolved.yaml
-    secrets: inherit
+    secrets:
+      kubeconfig: ${{ secrets.KUBECONFIG_FILE }}
